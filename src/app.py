@@ -20,6 +20,12 @@ def predict_page():
 
 @app.route("/predict", methods=["POST"])
 def predict():
+@app.route("/features")
+def features():
+    return render_template("features.html")
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
     try:
         start_date = request.form.get("start_date")
         end_date = request.form.get("end_date")
