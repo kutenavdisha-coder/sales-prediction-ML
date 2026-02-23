@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: linear-gradient(to right, #4e73df, #1cc88a);
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 150px;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: white;
+            color: #4e73df;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #f8f9fc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📊 Sales Prediction System</h1>
+    <p>Predict future sales using Machine Learning</p>
+    <br>
+    <a href="/predict-page">
+        <button>Go to Prediction Form</button>
+    </a>
+</div>
+
+</body>
+</html>

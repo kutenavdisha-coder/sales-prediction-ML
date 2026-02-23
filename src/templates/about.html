@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav>
+    <h2>📊 Sales Prediction</h2>
+    <div>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/predict-page">Predict</a>
+    </div>
+</nav>
+
+<section class="content">
+    <h1>About This Project</h1>
+
+    <p>
+    The Sales Prediction System is a Machine Learning based web application 
+    developed using Python and Flask framework.
+    </p>
+
+    <h3>Objective</h3>
+    <p>
+    The objective of this system is to forecast future sales based on 
+    historical sales data, pricing, discount percentage and marketing spend.
+    </p>
+
+    <h3>Technologies Used</h3>
+    <ul>
+        <li>Python</li>
+        <li>Flask Web Framework</li>
+        <li>Scikit-learn (Linear Regression)</li>
+        <li>HTML, CSS</li>
+        <li>Chart.js for Visualization</li>
+    </ul>
+
+    <h3>How It Works</h3>
+    <p>
+    User inputs business parameters → Data sent to Flask backend → 
+    Trained ML model predicts sales → Result displayed with graph visualization.
+    </p>
+
+</section>
+
+</body>
+</html>

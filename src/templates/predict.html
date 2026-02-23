@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+
+    <style>
+     
+ .result-title {
+    font-size: 22px;
+    margin: 0;
+}
+
+.result-value {
+    font-size: 28px;
+    color: #667eea;
+    margin-top: 10px;
+}
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #667eea, #764ba2);
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 50%;
+        max-width: 700px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+        font-size: 26px;
+    }
+
+    h3 {
+        margin-top: 25px;
+        margin-bottom: 15px;
+        color: #555;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 5px;
+        font-size: 18px;
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 14px;
+        color: #444;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0 18px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    input:focus, select:focus {
+        border-color: #667eea;
+        outline: none;
+        box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: #667eea;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background-color: #5563c1;
+        transform: scale(1.02);
+    }
+
+    .result-box {
+        background-color: #f0f8ff;
+        padding: 18px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-top: 15px;
+    }
+
+    .graph-section img {
+        width: 100%;
+        margin-top: 15px;
+        border-radius: 8px;
+    }
+
+    /* ================= RESPONSIVE BREAKPOINTS ================= */
+
+    /* Tablet */
+    @media (max-width: 992px) {
+        .container {
+            width: 70%;
+        }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+        .container {
+            width: 95%;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 16px;
+        }
+
+        button {
+            font-size: 14px;
+            padding: 10px;
+        }
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Sales Prediction System</h2>
+
+    <!-- ================= Input Section ================= -->
+    <div class="input-section">
+        <h3>Enter Sales Details</h3>
+
+        <form action="/predict" method="POST" onsubmit="return validateForm()">
+
+
+<label for="start_date">Start Date:</label>
+<input type="date"
+       id="start_date"
+       name="start_date"
+       value="{{ start_date if start_date else '' }}">
+
+ <label for="end_date">End Date:</label>
+<input type="date"
+       id="end_date"
+       name="end_date"
+       value="{{ end_date if end_date else '' }}">
+
+
+            <label for="category">Product Category:</label>
+            <select id="category" name="category" required>
+                <option value="" disabled selected>Select Category</option>
+                <option value="electronics">Electronics</option>
+                <option value="fashion">Fashion</option>
+                <option value="grocery">Grocery</option>
+                <option value="home">Home Appliances</option>
+            </select>
+
+           
+             <label for="previous_sales">Previous Month Sales:</label>
+<input type="number"
+       id="previous_sales"
+       name="previous_sales"
+       value="{{ previous_sales if previous_sales else '' }}"
+       required>
+
+
+           <label for="price">Product Price:</label>
+<input type="number"
+       id="price"
+       name="price"
+       value="{{ price if price else '' }}"
+       required>
+
+
+            <label for="discount">Discount (%):</label>
+<input type="number"
+       id="discount"
+       name="discount"
+       value="{{ discount if discount else '' }}"
+       required>
+
+
+              <label for="marketing">Marketing Spend:</label>
+<input type="number"
+       id="marketing"
+       name="marketing"
+       value="{{ marketing if marketing else '' }}"
+       required>
+
+
+            <button type="submit">Predict Sales</button>
+
+        </form>
+        
+    </div>
+
+    <!-- ================= Result Section ================= -->
+    <!-- ================= Result Section ================= -->
+<div class="result-section">
+    <h3>Prediction Result</h3>
+
+    {% if prediction is defined %}
+        <div class="result-box">
+            <p class="result-title">
+                📊 Predicted Sales Value
+            </p>
+            <p class="result-value">
+                {{ prediction }}
+            </p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- ================= Graph Section ================= -->
+<div class="graph-section">
+    <h3>Sales Visualization</h3>
+
+    {% if prediction %}
+        <canvas id="salesChart"
+                data-previous="{{ previous_sales }}"
+                data-prediction="{{ prediction }}"
+                width="400"
+                height="200">
+        </canvas>
+
+        
+    {% endif %}
+
+
+</div>  <!-- CLOSE container HERE -->
+
+
+
+
+
+    
+
+    <!-- ================= Graph Section ================= -->
+    <div class="graph-section">
+    <h3>Sales Visualization</h3>
+
+    {% if prediction %}
+        <canvas id="salesChart"
+                data-previous="{{ previous_sales }}"
+                data-prediction="{{ prediction }}"
+                width="400"
+                height="200">
+        </canvas>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const canvas = document.getElementById("salesChart");
+
+            const previousSales = parseFloat(canvas.dataset.previous);
+            const predictedSales = parseFloat(canvas.dataset.prediction);
+
+            const ctx = canvas.getContext("2d");
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: ["Previous Sales", "Predicted Value"],
+                    datasets: [{
+                        label: "Sales Comparison",
+                        data: [previousSales, predictedSales],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        </script>
+    {% endif %}
+</div>
+
+
+<script>
+function validateForm() {
+
+    let start = document.getElementById("start_date").value;
+    let end = document.getElementById("end_date").value;
+    let sales = document.getElementById("previous_sales").value;
+    let price = document.getElementById("price").value;
+    let discount = document.getElementById("discount").value;
+    let marketing = document.getElementById("marketing").value;
+
+    if (!start || !end) {
+        alert("Please select both start and end dates.");
+        return false;
+    }
+
+    if (end < start) {
+        alert("End date cannot be earlier than Start date.");
+        return false;
+    }
+
+    if (sales <= 0 || price <= 0 || marketing < 0) {
+        alert("Sales, Price must be greater than 0 and Marketing cannot be negative.");
+        return false;
+    }
+
+    if (discount < 0 || discount > 100) {
+        alert("Discount must be between 0 and 100.");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>
